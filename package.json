@@ -7,6 +7,8 @@
         "dev": "vite",
         "dev:backend": "cd backend && npm run dev",
         "build": "tsc && vite build",
+        "start": "node backend/index.js",
+        "postinstall": "cd backend && npm install",
         "preview": "vite preview",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
     },

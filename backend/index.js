@@ -181,11 +181,13 @@ Object.entries(routes).forEach(([path, handler]) => {
     app.use(`/api/${path}`, handler);
 });
 
+// Serve static files from the frontend build
+app.use(express.static(path.join(__dirname, '..', 'dist')));
+
 // Serve static widget file
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-
-app.get('/', (req, res) => res.send('Nexprism CRM API v1.0 - Operational'));
+// API health check
 app.get('/api/health', (req, res) => {
     res.json({
         status: 'UP',
@@ -201,6 +203,11 @@ app.get('/api/health', (req, res) => {
 
 // Error Middleware
 app.use(errorHandler);
+
+// Catch-all route to serve the frontend's index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
+});
 
 // Start Server
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
