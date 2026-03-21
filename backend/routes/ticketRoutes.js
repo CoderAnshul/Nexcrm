@@ -1,0 +1,116 @@
+const express = require('express');
+const router = express.Router();
+const Ticket = require('../models/Ticket');
+const { protect, authorize } = require('../middleware/authMiddleware');
+
+// Helper to escape special regex characters
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+// Get all tickets
+router.get('/', protect, async (req, res) => {
+    try {
+        let filter = {};
+        if (req.user.role === 'client') {
+            filter = { clientId: req.user.clientId };
+        } else if (req.user.role !== 'admin' && req.user.role !== 'owner') {
+            // Employees see tickets assigned to them (by ID or Name)
+            filter = {
+                $or: [
+                    { assignedTo: req.user._id.toString() },
+                    { assignedTo: req.user.name },
+                    { assignedTo: { $regex: new RegExp('^' + escapeRegex(req.user.name) + '$', 'i') } }
+                ]
+            };
+        }
+        const tickets = await Ticket.find(filter).sort({ createdAt: -1 });
+        res.json(tickets);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Create ticket
+router.post('/', protect, async (req, res) => {
+    const ticket = new Ticket({
+        subject: req.body.subject,
+        description: req.body.description,
+        priority: req.body.priority,
+        clientName: req.user.role === 'client' ? req.user.name : req.body.clientName,
+        clientId: req.user.role === 'client' ? req.user.clientId : req.body.clientId,
+        projectId: req.body.projectId,
+        assignedTo: req.body.assignedTo,
+        screenshot: req.body.screenshot
+    });
+    try {
+        const newTicket = await ticket.save();
+        res.status(201).json(newTicket);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+// GET single ticket
+router.get('/:id', protect, async (req, res) => {
+    try {
+        const ticket = await Ticket.findById(req.params.id);
+        if (!ticket) return res.status(404).json({ message: 'Ticket not found' });
+
+        const isAssigned = ticket.assignedTo === req.user._id.toString() ||
+            ticket.assignedTo === req.user.name ||
+            (ticket.assignedTo && ticket.assignedTo.toLowerCase() === req.user.name.toLowerCase());
+
+        if (req.user.role === 'client') {
+            if (ticket.clientId !== req.user.clientId) {
+                return res.status(403).json({ message: 'Not authorized' });
+            }
+        } else if (req.user.role !== 'admin' && req.user.role !== 'owner' && !isAssigned) {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+        res.json(ticket);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Update ticket
+router.put('/:id', protect, async (req, res) => {
+    try {
+        const ticket = await Ticket.findById(req.params.id);
+        if (!ticket) return res.status(404).json({ message: 'Ticket not found' });
+
+        const isAssigned = ticket.assignedTo === req.user._id.toString() ||
+            ticket.assignedTo === req.user.name ||
+            (ticket.assignedTo && ticket.assignedTo.toLowerCase() === req.user.name.toLowerCase());
+
+        if (req.user.role === 'client') {
+            if (ticket.clientId !== req.user.clientId) {
+                return res.status(403).json({ message: 'Not authorized' });
+            }
+        } else if (req.user.role !== 'admin' && req.user.role !== 'owner' && !isAssigned) {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+
+        if (req.body.status) ticket.status = req.body.status;
+        if (req.body.priority) ticket.priority = req.body.priority;
+        if (req.body.assignedTo) ticket.assignedTo = req.body.assignedTo;
+        if (req.body.description) ticket.description = req.body.description;
+
+        ticket.updatedAt = Date.now();
+        const updatedTicket = await ticket.save();
+        res.json(updatedTicket);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+// Delete ticket
+router.delete('/:id', protect, authorize('admin', 'owner'), async (req, res) => {
+    try {
+        await Ticket.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Ticket deleted' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+module.exports = router;

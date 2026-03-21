@@ -1,0 +1,213 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Professional Light Theme - Clean, Corporate, High Legibility */
+    --background: 210 40% 98%;
+    /* Slate 50 */
+    --foreground: 222.2 84% 4.9%;
+    /* Slate 950 */
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 221.2 83.2% 53.3%;
+    /* Blue 600 - Trustworthy & classic */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+
+    --radius: 0.75rem;
+    /* Classic Modern 12px */
+  }
+
+  .dark {
+    /* Professional Dark Theme - Deep Slate, Not Absolute Black */
+    --background: 222.2 47% 11.2%;
+    /* Slate 950 - Rich Deep Navy/Black */
+    --foreground: 0 0% 100%;
+    /* Pure White */
+
+    --card: 217.2 32.6% 17.5%;
+    /* Slate 900 */
+    --card-foreground: 0 0% 100%;
+
+    --popover: 222.2 47% 11.2%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 217.2 91.2% 59.8%;
+    /* Blue 500 - Visible on dark */
+    --primary-foreground: 0 0% 100%;
+    /* Force White Text on Buttons */
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 210 40% 98%;
+    /* Very Bright Slate */
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    overflow-x: hidden;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-feature-settings: "cv02", "cv05", "cv08", "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.011em;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  /* Sleek Professional Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50 transition-colors;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Glassmorphism Utility for occasional premium feel */
+  .glass {
+    @apply bg-background/80 backdrop-blur-md border-b border-border/50;
+  }
+
+  /* Standardized Dashboard Card for Consistency */
+  .dashboard-card {
+    @apply bg-card border border-border/50 rounded-2xl transition-all duration-300;
+    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .dashboard-card:hover {
+    @apply border-primary/20;
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
+  }
+
+  .dashboard-card-header {
+    @apply p-5 border-b border-border/20 flex items-center justify-between;
+  }
+
+  .dashboard-card-title {
+    @apply text-sm font-bold flex items-center gap-2.5 text-foreground/90;
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  .dashboard-card-content {
+    @apply p-5;
+  }
+
+  /* Premium Utilities */
+  .glass-panel {
+    @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/20 dark:border-white/5;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-primary via-blue-500 to-indigo-600;
+  }
+
+  .brand-gradient {
+    @apply bg-gradient-to-br from-primary via-blue-600 to-indigo-700;
+  }
+
+  .shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite linear;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .status-dot {
+    @apply h-2 w-2 rounded-full inline-block mr-2;
+  }
+
+  /* Custom Scrollbar Utility */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-200 rounded-full hover:bg-gray-300 transition-colors;
+  }
+}
