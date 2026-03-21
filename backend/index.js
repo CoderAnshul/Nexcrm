@@ -205,7 +205,7 @@ app.get('/api/health', (req, res) => {
 app.use(errorHandler);
 
 // Catch-all route to serve the frontend's index.html
-app.get('*', (req, res) => {
+app.get('(.*)', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 
