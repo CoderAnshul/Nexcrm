@@ -62,25 +62,25 @@
         "pdfkit": "^0.17.2",
         "socket.io": "^4.8.3",
         "uuid": "^13.0.0",
-        "dotenv": "^17.2.3"
-    },
-    "devDependencies": {
-        "@types/d3-scale": "^4.0.9",
-        "@types/node": "^20.10.6",
-        "@types/react": "^18.2.43",
-        "@types/react-dom": "^18.2.17",
-        "@types/react-simple-maps": "^3.0.6",
-        "@typescript-eslint/eslint-plugin": "^6.14.0",
-        "@typescript-eslint/parser": "^6.14.0",
+        "dotenv": "^17.2.3",
         "@vitejs/plugin-react": "^4.2.1",
         "autoprefixer": "^10.4.16",
-        "eslint": "^8.55.0",
-        "eslint-plugin-react-hooks": "^4.6.0",
-        "eslint-plugin-react-refresh": "^0.4.5",
         "postcss": "^8.4.32",
         "tailwindcss": "^3.4.0",
         "tailwindcss-animate": "^1.0.7",
         "typescript": "^5.2.2",
-        "vite": "^5.0.8"
+        "vite": "^5.0.8",
+        "@types/d3-scale": "^4.0.9",
+        "@types/node": "^20.10.6",
+        "@types/react": "^18.2.43",
+        "@types/react-dom": "^18.2.17",
+        "@types/react-simple-maps": "^3.0.6"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^6.14.0",
+        "@typescript-eslint/parser": "^6.14.0",
+        "eslint": "^8.55.0",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-react-refresh": "^0.4.5"
     }
 }
