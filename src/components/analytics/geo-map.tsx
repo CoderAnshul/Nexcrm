@@ -62,8 +62,8 @@ export const GeoMapChart = () => {
         <div className="w-full h-[400px] bg-sky-50/30 rounded-lg overflow-hidden relative border border-blue-100">
             <ComposableMap projectionConfig={{ scale: 140 }}>
                 <Geographies geography={geoUrl}>
-                    {({ geographies }) =>
-                        geographies.map((geo) => {
+                    {({ geographies }: { geographies: any[] }) =>
+                        geographies.map((geo: any) => {
                             const countryData = data.find((s: any) =>
                                 s.id === geo.properties.name ||
                                 s.id === geo.id ||
