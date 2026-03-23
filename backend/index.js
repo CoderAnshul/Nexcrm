@@ -202,21 +202,20 @@ app.get('/api/health', (req, res) => {
 });
 
 // Error Middleware
-app.use(errorHandler);
 
 // Catch-all route to serve the frontend's index.html
-app.get('*', (req, res) => {
+// Error Middleware
+app.use(errorHandler);
+
+// ✅ Catch-all (MUST be LAST)
+app.use((req, res) => {
     res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 // Start Server
-if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
-    server.listen(PORT, () => {
-        console.log(`\n🚀 Server established on port ${PORT}`);
-        console.log(`📡 Local: http://localhost:${PORT}`);
-        console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
-        console.log(`🔒 Security: Helmet ✓ | Rate Limit ✓ | CORS ✓ | Mongo Sanitize ✓\n`);
-    });
-}
+
+server.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+});
 
 // Connect to DB in background
 connectDB().catch(err => {
