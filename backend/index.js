@@ -205,10 +205,9 @@ app.get('/api/health', (req, res) => {
 app.use(errorHandler);
 
 // Catch-all route to serve the frontend's index.html
-app.get('/:path*', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
-
 // Start Server
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
     server.listen(PORT, () => {
